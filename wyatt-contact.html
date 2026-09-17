@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Wyatt — Carte de contact</title>
+<meta name="description" content="Carte de contact numérique de Wyatt, le réseau qui connecte aux bonnes personnes.">
+<meta name="theme-color" content="#0F1222">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink-950:#0F1222;
+    --ink-900:#161A2E;
+    --ink-800:#1E2238;
+    --amber-500:#E7A93E;
+    --amber-300:#F4CE86;
+    --mist-100:#ECEDF6;
+    --mist-400:#9AA0C3;
+    --line: rgba(236,237,246,0.12);
+    --bg: var(--ink-950);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){ --bg: var(--ink-950); }
+  }
+  :root[data-theme="dark"]{ --bg: var(--ink-950); }
+
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    min-height:100vh;
+    background: var(--bg);
+    font-family:'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--mist-100);
+  }
+  :focus-visible{ outline:2px solid var(--amber-500); outline-offset:3px; }
+
+  .page{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 32px 16px;
+    position:relative;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 18% 15%, rgba(231,169,62,0.10), transparent 42%),
+      radial-gradient(circle at 85% 85%, rgba(154,160,195,0.10), transparent 46%),
+      var(--ink-950);
+  }
+  .page::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image: radial-gradient(circle, var(--line) 1px, transparent 1px);
+    background-size: 28px 28px;
+    opacity:0.6;
+    pointer-events:none;
+  }
+
+  .scene{
+    position:relative;
+    width:100%;
+    max-width:380px;
+    perspective:1700px;
+  }
+  .card{
+    position:relative;
+    width:100%;
+    height:min(640px, 84vh);
+    cursor:pointer;
+  }
+  .card-inner{
+    position:relative;
+    width:100%;
+    height:100%;
+    transform-style:preserve-3d;
+    transition: transform 0.9s cubic-bezier(.2,.8,.2,1);
+  }
+  .card.is-flipped .card-inner{ transform: rotateY(180deg); }
+  @media (prefers-reduced-motion: reduce){
+    .card-inner{ transition: none; }
+  }
+
+  .face{
+    position:absolute; inset:0;
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+    border-radius:28px;
+    padding:40px 30px 28px;
+    display:flex;
+    flex-direction:column;
+    box-shadow: 0 30px 60px -22px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(255,255,255,0.05);
+    overflow-y:auto;
+  }
+  .face-front{
+    background: linear-gradient(160deg, var(--ink-800), var(--ink-900) 65%);
+    justify-content:space-between;
+  }
+  .face-back{
+    background: linear-gradient(160deg, var(--ink-900), var(--ink-950) 70%);
+    transform: rotateY(180deg);
+  }
+
+  .wordmark{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:2.4rem;
+    letter-spacing:0.01em;
+    text-transform:uppercase;
+    margin:0;
+    color: var(--mist-100);
+  }
+  .tagline{
+    margin:6px 0 0;
+    font-size:0.95rem;
+    font-weight:500;
+    color: var(--amber-300);
+  }
+  .pitch{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:1.3rem;
+    font-weight:500;
+    line-height:1.35;
+    color: var(--mist-100);
+    margin:0;
+  }
+  .front-bottom{ display:flex; flex-direction:column; align-items:center; gap:12px; }
+  .cta{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    background: var(--amber-500);
+    color: var(--ink-950);
+    font-weight:600;
+    font-size:0.95rem;
+    text-decoration:none;
+    padding:14px 34px;
+    border-radius:999px;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .cta:hover, .cta:focus-visible{ background: var(--amber-300); }
+  .hint{
+    margin:0;
+    font-size:0.78rem;
+    color: var(--mist-400);
+    text-align:center;
+  }
+
+  .back-title{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:1.4rem;
+    margin:0 0 4px;
+    color: var(--mist-100);
+  }
+  .back-subtitle{
+    margin:0;
+    font-size:0.92rem;
+    font-weight:500;
+    color: var(--amber-300);
+  }
+  .divider{ height:1px; background: var(--line); margin:18px 0; flex:none; }
+
+  .contact-list{ display:flex; flex-direction:column; gap:12px; }
+  .contact-row{
+    display:flex; align-items:center; gap:12px;
+    color: var(--mist-100);
+    text-decoration:none;
+    font-size:0.92rem;
+    padding:9px 10px;
+    border-radius:14px;
+    transition: background 0.2s ease;
+  }
+  .contact-row:hover, .contact-row:focus-visible{ background: rgba(236,237,246,0.06); }
+  .contact-row svg{ flex:none; width:19px; height:19px; color: var(--amber-500); }
+
+  .flip-note{
+    font-size:0.78rem;
+    color: var(--mist-400);
+    text-align:center;
+    line-height:1.4;
+    margin:0;
+  }
+
+  .qr-block{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    margin-top:20px;
+  }
+  .qr-frame{
+    width:128px; height:128px;
+    background: var(--mist-100);
+    border-radius:16px;
+    display:flex; align-items:center; justify-content:center;
+    padding:6px;
+    box-shadow: 0 0 0 1px rgba(231,169,62,0.55), 0 10px 24px -14px rgba(0,0,0,0.6);
+  }
+  .qr-caption{ margin:0; font-size:0.74rem; color: var(--mist-400); }
+  .open-link{
+    font-weight:600;
+    font-size:0.88rem;
+    color: var(--amber-300);
+    text-decoration:none;
+    padding:9px 22px;
+    border:1px solid rgba(231,169,62,0.5);
+    border-radius:999px;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .open-link:hover, .open-link:focus-visible{ background: var(--amber-500); color: var(--ink-950); }
+
+  .footer{
+    margin-top:auto;
+    padding-top:18px;
+    text-align:center;
+    font-size:0.72rem;
+    color: var(--mist-400);
+    flex:none;
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <div class="scene">
+      <div class="card" id="card" tabindex="0" role="button" aria-pressed="false" aria-label="Carte de contact Wyatt, touche pour retourner">
+        <div class="card-inner" id="cardInner">
+
+          <div class="face face-front">
+            <div>
+              <h1 class="wordmark">Wyatt</h1>
+              <p class="tagline">Networking professionnel</p>
+            </div>
+            <p class="pitch">Le réseau qui te connecte aux bonnes personnes.</p>
+            <div class="front-bottom">
+              <a class="cta" href="tel:+33760046787">Appeler</a>
+              <p class="hint">Touche la carte pour découvrir mes coordonnées</p>
+            </div>
+          </div>
+
+          <div class="face face-back">
+            <div>
+              <h2 class="back-title">Carte de contact Wyatt</h2>
+              <p class="back-subtitle">L'offre et la demande</p>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="contact-list">
+              <a class="contact-row" href="mailto:contact.wyattapp@gmail.com">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                <span>contact.wyattapp@gmail.com</span>
+              </a>
+              <a class="contact-row" href="tel:+33760046787">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                <span>07 60 04 67 87</span>
+              </a>
+            </div>
+
+            <div class="divider"></div>
+
+            <p class="flip-note">La carte se retourne automatiquement — touche-la pour la retourner à nouveau</p>
+
+            <div class="qr-block">
+              <div class="qr-frame" id="qrcode" aria-hidden="true"></div>
+              <p class="qr-caption">Scanne pour ouvrir l'app</p>
+              <a class="open-link" href="https://apps.apple.com/fr/app/wyatt-loffre-la-demande/id6802331094" target="_blank" rel="noopener">ouvrir Wyatt</a>
+            </div>
+
+            <p class="footer">Wyatt © 2026 — carte de contact numérique</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script>
+  (function(){
+    var card = document.getElementById('card');
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var flipped = false;
+
+    function setFlipped(state){
+      flipped = state;
+      card.classList.toggle('is-flipped', flipped);
+      card.setAttribute('aria-pressed', flipped ? 'true' : 'false');
+    }
+
+    card.addEventListener('click', function(e){
+      if (e.target.closest('a, button')) return;
+      setFlipped(!flipped);
+    });
+    card.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        setFlipped(!flipped);
+      }
+    });
+
+    window.addEventListener('load', function(){
+      if (window.QRCode) {
+        try {
+          new QRCode(document.getElementById('qrcode'), {
+            text: 'https://apps.apple.com/fr/app/wyatt-loffre-la-demande/id6802331094',
+            width: 116,
+            height: 116,
+            colorDark: '#101224',
+            colorLight: '#ECEDF6',
+            correctLevel: QRCode.CorrectLevel.H
+          });
+        } catch(err) {}
+      }
+      if (!reduceMotion) {
+        setTimeout(function(){ setFlipped(true); }, 2200);
+      }
+    });
+  })();
+  </script>
+</body>
+</html>
